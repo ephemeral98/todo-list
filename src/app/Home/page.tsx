@@ -1,12 +1,13 @@
 'use client';
 import styled from 'styled-components';
+
 const HomeWrap = styled.div`
-  background-color: skyblue;
+  /* background-color: skyblue; */
 `;
 
 const Home = () => {
   return (
-    <HomeWrap>
+    <HomeWrap className='text-green'>
       Lorem ipsum, dolor sit amet consectetur adipisicing elit. Omnis error perspiciatis quis
       officiis, est reprehenderit inventore fugit expedita voluptatem cum voluptas excepturi ex
       sapiente ad nihil facere saepe similique incidunt necessitatibus. Iure laboriosam, molestiae
