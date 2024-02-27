@@ -1,15 +1,18 @@
 'use client';
-
 import Image from 'next/image';
 import styles from './page.module.css';
-import 'uno.css';
-import ScrollList from "@cps/ScrollList"
+import ScrollList from '@cps/ScrollList';
+import Wrapper from '@/layouts';
 
-export default function Home() {
+const Home: React.FC = () => {
   return (
-    <div>
-      Lorem ipsum dolor sit.
-      <ScrollList></ScrollList>
-    </div>
+    <Wrapper>
+      <div slot="left">
+        <ScrollList></ScrollList>
+      </div>
+      <div slot="main">222</div>
+    </Wrapper>
   );
-}
+};
+
+export default Home;
