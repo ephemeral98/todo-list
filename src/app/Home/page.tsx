@@ -17,6 +17,8 @@ const Home = () => {
       fugit debitis obcaecati facilis maxime! Sapiente minima eius ab a. Eveniet recusandae eum
       voluptatem labore id at illum, mollitia fuga accusamus minus et, asperiores reprehenderit
       repellendus distinctio eligendi!
+
+      
     </HomeWrap>
   );
 };
