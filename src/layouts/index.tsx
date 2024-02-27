@@ -5,6 +5,11 @@ import styled from 'styled-components';
 const Wrap = styled.div`
   background-color: skyblue;
   display: flex;
+
+  > aside {
+    background-color: tomato;
+    flex: 0 0 300px;
+  }
 `;
 
 const Wrapper: React.FC<{ children: React.ReactNode }> = (props) => {
