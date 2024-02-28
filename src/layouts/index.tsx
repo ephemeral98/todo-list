@@ -1,10 +1,12 @@
 'use client';
 import { getSlot } from '@/utils';
+import React from 'react';
 import styled from 'styled-components';
 
 const Wrap = styled.div`
   background-color: skyblue;
   display: flex;
+  height: 100vh;
 
   > aside {
     background-color: tomato;
@@ -12,10 +14,10 @@ const Wrap = styled.div`
   }
 `;
 
-const Wrapper: React.FC<{ children: React.ReactNode }> = (props) => {
+const Wrapper: React.FC<{ children: React.ReactNode; style?: React.CSSProperties }> = (props) => {
   const slots = getSlot(props);
   return (
-    <Wrap>
+    <Wrap style={props.style}>
       <aside>{slots.left}</aside>
       <main>{slots.main}</main>
     </Wrap>
