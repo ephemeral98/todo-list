@@ -4,10 +4,11 @@ import styles from './page.module.css';
 import ScrollList from '@cps/ScrollList';
 import Wrapper from '@/layouts';
 import TodoList from '@/PageComponents/Home/TodoList';
+import 'uno.css';
 
 const Home: React.FC = () => {
   return (
-    <Wrapper>
+    <Wrapper style={{ width: '1200px', margin: '0 auto' }}>
       <div slot="left">
         {/* <ScrollList></ScrollList> */}
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam vel quidem iusto cumque

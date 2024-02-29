@@ -9,3 +9,10 @@ export const getSlot = (props: { children: React.ReactNode }) => {
   }, {});
   return slots;
 };
+
+/**
+ * 判断是否客户端; true是
+ */
+export const isClient = () => {
+  return typeof window !== 'undefined';
+};
