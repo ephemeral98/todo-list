@@ -1,11 +1,21 @@
+import { localMemory } from 'localmemory';
+
 export const useHideDone = () => {
   const DONESTATUS = 'doneStatus';
-  const showDone = () => {
-    const  t = !!localStorage.getItem(DONESTATUS);
-    console.log('!!localStorage.getItem(DONESTATUS)....', t);
-    return t;
+
+  /**
+   * 显示已经完成的todo
+   */
+  const showDone = () => !!+(localMemory.getItem(DONESTATUS) || '');
+
+  /**
+   * 设置显示已经完成的状态
+   */
+  const setDoneStatus = () => {
+    const isDone = showDone();
+    localMemory.setItem({ name: DONESTATUS, value: isDone ? '0' : '1' });
   };
-  const setDoneStatus = () => localStorage.setItem(DONESTATUS, String(!showDone()));
+
   return {
     showDone,
     setDoneStatus,

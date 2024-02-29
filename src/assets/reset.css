@@ -165,6 +165,7 @@ select {
 div,
 section {
   box-sizing: border-box;
+  color: #000;
 }
 
 button {

@@ -1,7 +1,13 @@
 import React from 'react';
 import { styled } from 'styled-components';
 import { Button, Dropdown, Menu } from '@arco-design/web-react';
-import { IconPlus, IconPenFill, IconDelete, IconEye } from '@arco-design/web-react/icon';
+import {
+  IconPlus,
+  IconPenFill,
+  IconDelete,
+  IconEye,
+  IconEyeInvisible,
+} from '@arco-design/web-react/icon';
 import { useHideDone } from './useTodoList';
 
 interface IProps {
@@ -46,13 +52,8 @@ const TodoHeader: React.FC<IProps> = (props) => {
                 修改
               </Button>
             </Menu.Item>
+
             <Menu.Item key="2">
-              <Button type="text" status="danger" size="mini" onClick={() => {}}>
-                <IconDelete />
-                删除此分类
-              </Button>
-            </Menu.Item>
-            <Menu.Item key="3">
               <Button
                 type="text"
                 status="warning"
@@ -62,8 +63,24 @@ const TodoHeader: React.FC<IProps> = (props) => {
                   props.onHideDone();
                 }}
               >
-                <IconEye />
-                隐藏已完成
+                {showDone() ? (
+                  <>
+                    <IconEyeInvisible />
+                    隐藏已完成
+                  </>
+                ) : (
+                  <>
+                    <IconEye />
+                    显示已完成
+                  </>
+                )}
+              </Button>
+            </Menu.Item>
+            
+            <Menu.Item key="3">
+              <Button type="text" status="danger" size="mini" onClick={() => {}}>
+                <IconDelete />
+                删除此分类
               </Button>
             </Menu.Item>
             <Menu.Item key="4">

@@ -77,12 +77,9 @@ const TodoList = () => {
       <DragComp.Wrap className="list-content">
         {data
           .filter((item) => {
-            if (showDone()) {
-              console.log('ttttt');
+            if (!showDone()) {
               return item;
             }
-            console.log('2222');
-
             return item.done;
           })
           .map((item, inx) => (
