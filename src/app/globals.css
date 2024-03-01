@@ -75,3 +75,11 @@
     color-scheme: dark;
   }
 }
+
+.arco-dropdown-menu-item[color='sky']:hover {
+  color: skyblue !important;
+}
+
+.arco-dropdown-menu-item[color='red']:hover {
+  color: tomato !important;
+}

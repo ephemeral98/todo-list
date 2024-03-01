@@ -8,8 +8,9 @@ import { ItemTypes } from './type';
 interface IProps {
   id: any;
   index: number;
-  moveCard: (dragIndex: number, hoverIndex: number) => void;
+  onMoveCard: (dragIndex: number, hoverIndex: number) => void;
   children: ReactNode;
+  className?: string;
 }
 
 interface DragItem {
@@ -18,7 +19,7 @@ interface DragItem {
   type: string;
 }
 
-const DragItem: FC<IProps> = ({ id, index, moveCard, children }) => {
+const DragItem: FC<IProps> = ({ id, index, onMoveCard, children, className }) => {
   const ref = useRef<HTMLDivElement>(null);
   const [{ handlerId }, drop] = useDrop<DragItem, void, { handlerId: Identifier | null }>({
     accept: ItemTypes.CARD,
@@ -66,7 +67,7 @@ const DragItem: FC<IProps> = ({ id, index, moveCard, children }) => {
       }
 
       // Time to actually perform the action
-      moveCard(dragIndex, hoverIndex);
+      onMoveCard(dragIndex, hoverIndex);
 
       // Note: we're mutating the monitor item here!
       // Generally it's better to avoid mutations,
@@ -89,7 +90,12 @@ const DragItem: FC<IProps> = ({ id, index, moveCard, children }) => {
   const opacity = isDragging ? 0 : 1;
   drag(drop(ref));
   return (
-    <div ref={ref} style={{ cursor: 'move', opacity }} data-handler-id={handlerId}>
+    <div
+      className={className}
+      ref={ref}
+      style={{ cursor: 'move', opacity }}
+      data-handler-id={handlerId}
+    >
       {children}
     </div>
   );

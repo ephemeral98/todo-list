@@ -16,7 +16,7 @@ const style = {
 export interface CardProps {
   id: any;
   index: number;
-  moveCard: (dragIndex: number, hoverIndex: number) => void;
+  onMoveCard: (dragIndex: number, hoverIndex: number) => void;
   children: ReactNode;
 }
 
@@ -26,7 +26,7 @@ interface DragItem {
   type: string;
 }
 
-const DragItem: FC<CardProps> = ({ id, index, moveCard, children }) => {
+const DragItem: FC<CardProps> = ({ id, index, onMoveCard, children }) => {
   const ref = useRef<HTMLDivElement>(null);
   const [{ handlerId }, drop] = useDrop<DragItem, void, { handlerId: Identifier | null }>({
     accept: ItemTypes.CARD,
@@ -74,7 +74,7 @@ const DragItem: FC<CardProps> = ({ id, index, moveCard, children }) => {
       }
 
       // Time to actually perform the action
-      moveCard(dragIndex, hoverIndex);
+      onMoveCard(dragIndex, hoverIndex);
 
       // Note: we're mutating the monitor item here!
       // Generally it's better to avoid mutations,

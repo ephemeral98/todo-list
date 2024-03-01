@@ -16,3 +16,14 @@ export const getSlot = (props: { children: React.ReactNode }) => {
 export const isClient = () => {
   return typeof window !== 'undefined';
 };
+
+/**
+ * 睡眠函数
+ */
+export const sleep = (time: number) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(true);
+    }, time);
+  });
+};

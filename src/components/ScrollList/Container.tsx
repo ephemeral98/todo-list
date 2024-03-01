@@ -50,7 +50,7 @@ export const Container: FC = () => {
       },
     ])
 
-    const moveCard = useCallback((dragIndex: number, hoverIndex: number) => {
+    const onMoveCard = useCallback((dragIndex: number, hoverIndex: number) => {
       setCards((prevCards: Item[]) =>
         update(prevCards, {
           $splice: [
@@ -69,7 +69,7 @@ export const Container: FC = () => {
             index={index}
             id={card.id}
             text={card.text}
-            moveCard={moveCard}
+            onMoveCard={onMoveCard}
           />
         )
       },
