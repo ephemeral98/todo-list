@@ -2,12 +2,12 @@ import { styled } from 'styled-components';
 import CategoryItem from './CategoryItem';
 import DragComp, { update } from '../DragComp';
 import { Dispatch, FC, SetStateAction, useCallback, useState } from 'react';
-import { ITodoCategory } from '@/service/useTodoApi';
+import { ITodoCategory } from '@/service/useCategoryApi';
 import { KeyedMutator } from 'swr';
 import Image from 'next/image';
-import { IconPlus, IconPenFill, IconDelete } from '@arco-design/web-react/icon';
+import { IconPlus } from '@arco-design/web-react/icon';
 import { AddCategoryModal, UpdateCategoryModal, DeleteCategoryModal } from '../Modals';
-import { Dropdown, Menu } from '@arco-design/web-react';
+import ContextMenu from '../ContextMenu';
 
 const CategoryWrap = styled.div`
   height: 100%;
@@ -48,6 +48,7 @@ const Category: FC<IProps> = (props) => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [pickCategory, setPickCategory] = useState<ITodoCategory>(); // 要删除或者编辑的分类
 
   const onMoveCard = useCallback((dragIndex: number, hoverIndex: number) => {
     props.setTodoCategory((prevCards) =>
@@ -72,19 +73,15 @@ const Category: FC<IProps> = (props) => {
               id={item.id}
               onMoveCard={onMoveCard}
             >
-              <Dropdown
-                trigger="contextMenu"
-                position="bl"
-                droplist={
-                  <Menu>
-                    <Menu.Item key="1" color="sky" onClick={() => setShowUpdateModal(true)}>
-                      <IconPenFill /> 编辑
-                    </Menu.Item>
-                    <Menu.Item key="2" color="red" onClick={() => setShowDeleteModal(true)}>
-                      <IconDelete /> 删除
-                    </Menu.Item>
-                  </Menu>
-                }
+              <ContextMenu
+                onEdit={() => {
+                  setPickCategory(item);
+                  setShowUpdateModal(true);
+                }}
+                onDelete={() => {
+                  setPickCategory(item);
+                  setShowDeleteModal(true);
+                }}
               >
                 <div>
                   <CategoryItem
@@ -100,7 +97,7 @@ const Category: FC<IProps> = (props) => {
                     count={item.count}
                   />
                 </div>
-              </Dropdown>
+              </ContextMenu>
             </DragComp.Item>
           ))}
         </DragComp.Wrap>
@@ -127,7 +124,7 @@ const Category: FC<IProps> = (props) => {
 
       {/* 修改分类 */}
       <UpdateCategoryModal
-        name=""
+        name={pickCategory?.name || ''}
         visible={showUpdateModal}
         onOk={() => {
           setShowUpdateModal(false);
@@ -139,8 +136,8 @@ const Category: FC<IProps> = (props) => {
 
       {/* 删除分类 */}
       <DeleteCategoryModal
-        id=""
-        name=""
+        id={pickCategory?.id || ''}
+        name={pickCategory?.name || ''}
         visible={showDeleteModal}
         onOk={() => {
           setShowDeleteModal(false);

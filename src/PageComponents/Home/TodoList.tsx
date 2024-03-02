@@ -5,8 +5,12 @@ import { FC, useCallback, useState } from 'react';
 import update from 'immutability-helper';
 import DragComp from '@cps/DragComp';
 import { useHideDone } from './useTodoList';
-import { useTodos } from '@/service/useTodoApi';
+import { useTodos } from '@/service/useCategoryApi';
 import Waiting from '@/components/Waiting';
+import ContextMenu from '@/components/ContextMenu';
+import { ITodo } from '@/service/useCategoryApi';
+import { Modal } from '@arco-design/web-react';
+import { useDeleteTodo } from '@/service/useTodoApi';
 
 const TodoListWrap = styled.div`
   padding: 20px 10px;
@@ -32,6 +36,9 @@ const TodoList: FC<IProps> = (props) => {
   const [hideDone, setHideDone] = useState(false);
   const { showDone } = useHideDone();
   const { todoList, setTodoList, loadTodoList, refreshTodo } = useTodos();
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [pickTodo, setPickTodo] = useState<ITodo>(); // 要删除或者编辑的Todo
+  const { deleteTodo, loadDeleteTodo } = useDeleteTodo();
 
   const onMoveCard = useCallback((dragIndex: number, hoverIndex: number) => {
     setTodoList((todoList) => {
@@ -45,55 +52,85 @@ const TodoList: FC<IProps> = (props) => {
   }, []);
 
   return (
-    <TodoListWrap>
-      <TodoHeader
-        style={{ height: '50rem' }}
-        onHideDone={() => setHideDone(!hideDone)}
-        onDeleteDone={() => {}}
+    <>
+      <TodoListWrap>
+        <TodoHeader
+          style={{ height: '50rem' }}
+          onHideDone={() => setHideDone(!hideDone)}
+          onDeleteDone={() => {}}
+        >
+          {props.title}
+        </TodoHeader>
+        <Waiting isLoading={loadTodoList}>
+          <DragComp.Wrap className="list-content">
+            {todoList
+              ?.filter((item) => {
+                if (showDone()) {
+                  return item;
+                }
+                return !item.done;
+              })
+              .map((item, inx) => (
+                <DragComp.Item key={item.id} id={item.id} index={inx} onMoveCard={onMoveCard}>
+                  <ContextMenu
+                    onEdit={() => {
+                      setPickTodo(item);
+                      // setShowUpdateModal(true);
+                    }}
+                    onDelete={() => {
+                      setPickTodo(item);
+                      setShowDeleteModal(true);
+                    }}
+                  >
+                    <div>
+                      <TodoItem
+                        onCheck={(isDone) => {
+                          const newList = todoList.map((it) => {
+                            if (item.id === it.id) {
+                              it.done = isDone;
+                            }
+                            return it;
+                          });
+                          setTodoList(newList);
+                        }}
+                        onClick={() => {
+                          const newList = todoList.map((it) => {
+                            if (item.done) {
+                              return it;
+                            }
+                            it.active = item.id === it.id;
+                            return it;
+                          });
+                          setTodoList(newList);
+                        }}
+                        active={item.active}
+                        done={item.done}
+                      >
+                        {item.content}
+                      </TodoItem>
+                    </div>
+                  </ContextMenu>
+                </DragComp.Item>
+              ))}
+          </DragComp.Wrap>
+        </Waiting>
+      </TodoListWrap>
+
+      <Modal
+        title="删除分确定要删除该Todo吗？"
+        visible={showDeleteModal}
+        onOk={async () => {
+          console.log('确认删除');
+          const resp = await deleteTodo(pickTodo?.id || '');
+          resp && setShowDeleteModal(false);
+        }}
+        onCancel={() => setShowDeleteModal(false)}
+        autoFocus={false}
+        focusLock={true}
       >
-        {props.title}
-      </TodoHeader>
-      <Waiting isLoading={loadTodoList}>
-        <DragComp.Wrap className="list-content">
-          {todoList
-            ?.filter((item) => {
-              if (!showDone()) {
-                return item;
-              }
-              return item.done;
-            })
-            .map((item, inx) => (
-              <DragComp.Item key={item.id} id={item.id} index={inx} onMoveCard={onMoveCard}>
-                <TodoItem
-                  onCheck={(isDone) => {
-                    const newList = todoList.map((it) => {
-                      if (item.id === it.id) {
-                        it.done = isDone;
-                      }
-                      return it;
-                    });
-                    setTodoList(newList);
-                  }}
-                  onClick={() => {
-                    const newList = todoList.map((it) => {
-                      if (item.done) {
-                        return it;
-                      }
-                      it.active = item.id === it.id;
-                      return it;
-                    });
-                    setTodoList(newList);
-                  }}
-                  active={item.active}
-                  done={item.done}
-                >
-                  {item.content}
-                </TodoItem>
-              </DragComp.Item>
-            ))}
-        </DragComp.Wrap>
-      </Waiting>
-    </TodoListWrap>
+        {pickTodo?.content}
+      </Modal>
+    </>
   );
 };
 

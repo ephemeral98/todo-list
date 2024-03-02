@@ -1,6 +1,6 @@
 import { Button, Input, Modal } from '@arco-design/web-react';
 import { FC, useEffect, useState } from 'react';
-import { useAddCategory, useUpdateCategory, useDeleteCategory } from '@/service/useTodoApi';
+import { useAddCategory, useUpdateCategory, useDeleteCategory } from '@/service/useCategoryApi';
 
 export interface IAddCategoryModalProps {
   visible: boolean;
@@ -130,7 +130,7 @@ export const DeleteCategoryModal: FC<IDeleteCategoryModalProps> = (props) => {
       focusLock={true}
       confirmLoading={loadDeleteCategory}
     >
-      确定要删除分类
+      确定要删除分类 <span className="font-bold">{props.name}</span> 吗？
     </Modal>
   );
 };
