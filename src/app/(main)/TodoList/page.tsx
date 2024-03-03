@@ -1,16 +1,18 @@
+'use client';
+
 import { styled } from 'styled-components';
-import TodoHeader from '../../app/(main)/TodoList/TodoHeader';
-import TodoItem from '../../app/(main)/TodoList/TodoItem';
+import TodoHeader from './TodoHeader';
+import TodoItem from './TodoItem';
 import { FC, useCallback, useState } from 'react';
 import update from 'immutability-helper';
 import DragComp from '@cps/DragComp';
-import { useHideDone } from '../../app/(main)/TodoList/useTodoList';
-import { useTodos } from '@/service/useCategoryApi';
+import { useHideDone } from './useTodoList';
+import { useTodos, ITodo } from '@/service/useCategoryApi';
 import Waiting from '@/components/Waiting';
 import ContextMenu from '@/components/ContextMenu';
-import { ITodo } from '@/service/useCategoryApi';
 import { Modal } from '@arco-design/web-react';
 import { useDeleteTodo } from '@/service/useTodoApi';
+import { useRouter } from 'next/navigation';
 
 const TodoListWrap = styled.div`
   padding: 20px 10px;
@@ -39,6 +41,7 @@ const TodoList: FC<IProps> = (props) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [pickTodo, setPickTodo] = useState<ITodo>(); // 要删除或者编辑的Todo
   const { deleteTodo, loadDeleteTodo } = useDeleteTodo();
+  const router = useRouter();
 
   const onMoveCard = useCallback((dragIndex: number, hoverIndex: number) => {
     setTodoList((todoList) => {
@@ -75,6 +78,8 @@ const TodoList: FC<IProps> = (props) => {
                   <ContextMenu
                     onEdit={() => {
                       setPickTodo(item);
+                      console.log('useRouter...', router);
+                      router.push('content');
                       // setShowUpdateModal(true);
                     }}
                     onDelete={() => {

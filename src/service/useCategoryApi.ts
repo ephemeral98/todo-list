@@ -2,6 +2,7 @@ import { sleep } from '@/utils';
 import { useEffect, useMemo, useState } from 'react';
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export interface ITodoCategory {
   id: string;
@@ -18,6 +19,9 @@ export interface ITodo {
 }
 
 export const useTodoCategory = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   const [todoCategory, setTodoCategory] = useState<ITodoCategory[]>([]);
   const { data, isLoading, mutate } = useSWR<ITodoCategory[]>('/api/category', async () => {
     await sleep(2000);
@@ -27,18 +31,33 @@ export const useTodoCategory = () => {
         active: false,
         name: '分类1',
         count: 999,
+        content: [
+          {
+
+          }
+        ]
       },
       {
         id: '2',
-        active: true,
+        active: false,
         name: '分类2',
         count: 999,
+        content: [
+          {
+
+          }
+        ]
       },
       {
         id: '3',
         active: false,
         name: '分类33',
         count: 999,
+        content: [
+          {
+
+          }
+        ]
       },
     ];
   });
@@ -46,16 +65,27 @@ export const useTodoCategory = () => {
   useEffect(() => {
     if (data?.length) {
       if (todoCategory.length) {
-        const activeItem = todoCategory.find((item) => item.active);
-        const newList = data.map((item) => {
-          if (activeItem?.id === item.id) {
-            item.active = true;
-          }
+        const activeItem = todoCategory.find((item) => item.active) || todoCategory[0];
+        const newTodoList = todoCategory.map((item) => {
+          item.active = item.id === activeItem.id;
           return item;
         });
-        setTodoCategory(newList);
+
+        router.push(`TodoList?id=${activeItem.id}`);
+        setTodoCategory(newTodoList);
       } else {
-        setTodoCategory(data);
+        const id = searchParams.get('id');
+        if (id) {
+          setTodoCategory(
+            data.map((item) => {
+              item.active = item.id === id;
+              return item;
+            })
+          );
+        } else {
+          data[0].active = true;
+          setTodoCategory(data);
+        }
       }
     }
   }, [data]);
@@ -185,4 +215,3 @@ export const useDeleteCategory = () => {
     loadDeleteCategory: isMutating,
   };
 };
-

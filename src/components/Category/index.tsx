@@ -8,6 +8,7 @@ import Image from 'next/image';
 import { IconPlus } from '@arco-design/web-react/icon';
 import { AddCategoryModal, UpdateCategoryModal, DeleteCategoryModal } from '../Modals';
 import ContextMenu from '../ContextMenu';
+import { useRouter } from 'next/navigation';
 
 const CategoryWrap = styled.div`
   height: 100%;
@@ -49,6 +50,7 @@ const Category: FC<IProps> = (props) => {
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [pickCategory, setPickCategory] = useState<ITodoCategory>(); // 要删除或者编辑的分类
+  const router = useRouter();
 
   const onMoveCard = useCallback((dragIndex: number, hoverIndex: number) => {
     props.setTodoCategory((prevCards) =>
@@ -90,6 +92,7 @@ const Category: FC<IProps> = (props) => {
                         it.active = item.id === it.id;
                         return it;
                       });
+                      router.push(`TodoList?id=${item.id}`);
                       props.setTodoCategory(newList);
                     }}
                     name={item.name}
