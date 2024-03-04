@@ -6,7 +6,6 @@ import '@arco-design/web-react/dist/css/arco.css';
 import React from 'react';
 import Wrapper from '@/layouts';
 import Category from '@cps/Category';
-import { useTodoCategory } from '@/service/useCategoryApi';
 
 const inter = Inter({ subsets: ['latin'] });
 export default function RootLayout({
@@ -14,23 +13,16 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { todoCategory, setTodoCategory, loadTodoCategory, refreshTodoCategory, activeCategory } =
-    useTodoCategory();
-
   return (
     <html>
       <body id="app" className={`${inter.className} app`}>
         <Wrapper style={{ width: '1200px', margin: '0 auto' }}>
           <div slot="left" className="h-full">
-            <Category
-              todoCategory={todoCategory}
-              setTodoCategory={setTodoCategory}
-              loadTodoCategory={loadTodoCategory}
-              refreshTodoCategory={refreshTodoCategory}
-              onAddCategory={() => {}}
-            />
+            <Category />
           </div>
-          <div slot="main" className='h-full'>{children}</div>
+          <div slot="main" className="h-full">
+            {children}
+          </div>
         </Wrapper>
       </body>
     </html>

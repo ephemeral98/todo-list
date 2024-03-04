@@ -7,12 +7,12 @@ import { FC, useCallback, useState } from 'react';
 import update from 'immutability-helper';
 import DragComp from '@cps/DragComp';
 import { useHideDone } from './useTodoList';
-import { useTodos, ITodo } from '@/service/useCategoryApi';
 import Waiting from '@/components/Waiting';
 import ContextMenu from '@/components/ContextMenu';
 import { Modal } from '@arco-design/web-react';
 import { useDeleteTodo } from '@/service/useTodoApi';
 import { useRouter } from 'next/navigation';
+import useTodoListStore, { ITodo } from '@/store/todoListStore';
 
 const TodoListWrap = styled.div`
   padding: 20px 10px;
@@ -37,22 +37,27 @@ interface IProps {
 const TodoList: FC<IProps> = (props) => {
   const [hideDone, setHideDone] = useState(false);
   const { showDone } = useHideDone();
-  const { todoList, setTodoList, loadTodoList, refreshTodo } = useTodos();
+  // const { todoList, setTodoList, loadTodoList, refreshTodo } = useTodos();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [pickTodo, setPickTodo] = useState<ITodo>(); // 要删除或者编辑的Todo
   const { deleteTodo, loadDeleteTodo } = useDeleteTodo();
   const router = useRouter();
+  const { curTodoList, setCurTodoList, loadTodoList } = useTodoListStore((state) => state);
 
-  const onMoveCard = useCallback((dragIndex: number, hoverIndex: number) => {
-    setTodoList((todoList) => {
-      return update(todoList, {
-        $splice: [
-          [dragIndex, 1],
-          [hoverIndex, 0, todoList![dragIndex]],
-        ],
+  const onMoveCard = useCallback(
+    (dragIndex: number, hoverIndex: number) => {
+      setCurTodoList({
+        ...curTodoList,
+        children: update(curTodoList.children, {
+          $splice: [
+            [dragIndex, 1],
+            [hoverIndex, 0, curTodoList.children[dragIndex]],
+          ],
+        }),
       });
-    });
-  }, []);
+    },
+    [curTodoList]
+  );
 
   return (
     <>
@@ -66,19 +71,18 @@ const TodoList: FC<IProps> = (props) => {
         </TodoHeader>
         <Waiting isLoading={loadTodoList}>
           <DragComp.Wrap className="list-content">
-            {todoList
+            {curTodoList.children
               ?.filter((item) => {
                 if (showDone()) {
                   return item;
                 }
-                return !item.done;
+                return !item.isDone;
               })
               .map((item, inx) => (
                 <DragComp.Item key={item.id} id={item.id} index={inx} onMoveCard={onMoveCard}>
                   <ContextMenu
                     onEdit={() => {
                       setPickTodo(item);
-                      console.log('useRouter...', router);
                       router.push('content');
                       // setShowUpdateModal(true);
                     }}
@@ -90,26 +94,26 @@ const TodoList: FC<IProps> = (props) => {
                     <div>
                       <TodoItem
                         onCheck={(isDone) => {
-                          const newList = todoList.map((it) => {
+                          const newList = curTodoList.children.map((it) => {
                             if (item.id === it.id) {
-                              it.done = isDone;
+                              it.isDone = isDone;
                             }
                             return it;
                           });
-                          setTodoList(newList);
+                          setCurTodoList({ ...curTodoList, children: newList });
                         }}
                         onClick={() => {
-                          const newList = todoList.map((it) => {
-                            if (item.done) {
+                          const newList = curTodoList.children.map((it) => {
+                            if (item.isDone) {
                               return it;
                             }
                             it.active = item.id === it.id;
                             return it;
                           });
-                          setTodoList(newList);
+                          setCurTodoList({ ...curTodoList, children: newList });
                         }}
                         active={item.active}
-                        done={item.done}
+                        done={item.isDone}
                       >
                         {item.content}
                       </TodoItem>
