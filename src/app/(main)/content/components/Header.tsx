@@ -1,13 +1,15 @@
 import React from 'react';
 import { styled } from 'styled-components';
-import { Button, Dropdown, Menu } from '@arco-design/web-react';
+import { Button, Dropdown, Menu, Popover, DatePicker } from '@arco-design/web-react';
 import {
   IconPlus,
   IconPenFill,
   IconDelete,
   IconEye,
   IconEyeInvisible,
+  IconArrowLeft,
 } from '@arco-design/web-react/icon';
+import { useRouter } from 'next/navigation';
 
 interface IProps {
   style?: React.CSSProperties;
@@ -20,6 +22,7 @@ const ContentHeaderWrap = styled.div`
   justify-content: space-between;
   align-items: center;
   background-color: #008c8c;
+  height: 50rem;
 
   .arco-icon.arco-icon-more {
     color: #3a3a3b;
@@ -31,12 +34,31 @@ const ContentHeaderWrap = styled.div`
 `;
 
 const ContentHeader: React.FC<IProps> = (props) => {
+  const router = useRouter();
+
+  function onOk(dateString: any, date: any) {
+    console.log('onOk: ', dateString, date);
+  }
   return (
     <ContentHeaderWrap style={props.style}>
-      <div>返回</div>
-      <div>选择日期</div>
-      <div>保存？</div>
-      <div>删除</div>
+      <IconArrowLeft
+      onClick={() => {
+        router.back();
+      }}
+      cursor={'pointer'} fontSize={'20px'}/>
+      <div className='flex-center'>
+        <DatePicker
+          style={{ width: 200, marginRight: 20 }}
+          showTime={{
+            defaultValue: '04:05:06',
+          }}
+          format="YYYY-MM-DD HH:mm:ss"
+          onOk={onOk}
+        />
+        <Popover content={<span style={{ whiteSpace: 'nowrap' }}>删除该Todo</span>}>
+          <IconDelete type="danger" color="red" fontSize={'22px'} />
+        </Popover>
+      </div>
     </ContentHeaderWrap>
   );
 };

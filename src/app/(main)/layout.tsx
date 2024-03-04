@@ -30,7 +30,7 @@ export default function RootLayout({
               onAddCategory={() => {}}
             />
           </div>
-          <div slot="main">{children}</div>
+          <div slot="main" className='h-full'>{children}</div>
         </Wrapper>
       </body>
     </html>
