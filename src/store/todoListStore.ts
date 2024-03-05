@@ -26,11 +26,19 @@ interface ITodoListStore {
 }
 
 const useTodoListStore = create<ITodoListStore>((set) => ({
-  todoList: [],
+  todoList: [], // 分类列表
   setTodoList: (preTodoList: ITodoList[]) => set(() => ({ todoList: preTodoList })),
-  loadTodoList: false,
-  curTodoList: {} as ITodoList,
+  loadTodoList: false, // 加载中
+  curTodoList: {} as ITodoList, // 当前分类
+  /**
+   * 设置当前分类
+   * @param preTodo 
+   * @returns 
+   */
   setCurTodoList: (preTodo: ITodoList) => set(() => ({ curTodoList: preTodo })),
+  /**
+   * 获取todo列表
+   */
   fetchTodoList: async () => {
     set(() => ({ loadTodoList: true }));
     await sleep(3000);

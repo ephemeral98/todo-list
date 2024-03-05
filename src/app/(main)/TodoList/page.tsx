@@ -22,6 +22,7 @@ const TodoListWrap = styled.div`
     padding-right: 10rem;
     overflow: auto;
     background-color: pink;
+    width: 100%;
     height: calc(100vh - 40px - 50rem);
 
     > div:not(:first-child) {
