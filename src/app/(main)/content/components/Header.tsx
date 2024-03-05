@@ -1,15 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { styled } from 'styled-components';
-import { Button, Dropdown, Menu, Popover, DatePicker } from '@arco-design/web-react';
-import {
-  IconPlus,
-  IconPenFill,
-  IconDelete,
-  IconEye,
-  IconEyeInvisible,
-  IconArrowLeft,
-} from '@arco-design/web-react/icon';
-import { useRouter } from 'next/navigation';
+import { Popover, DatePicker, Modal } from '@arco-design/web-react';
+import { IconDelete, IconArrowLeft } from '@arco-design/web-react/icon';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useDeleteCategory } from '@/service/useTodoListApi';
+import useTodoListStore from '@store/todoListStore';
 
 interface IProps {
   style?: React.CSSProperties;
@@ -35,31 +30,66 @@ const ContentHeaderWrap = styled.div`
 
 const ContentHeader: React.FC<IProps> = (props) => {
   const router = useRouter();
+  const query = useSearchParams();
+  const { deleteCategory, loadDeleteCategory } = useDeleteCategory();
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const { curTodoList } = useTodoListStore((state) => state);
 
   function onOk(dateString: any, date: any) {
     console.log('onOk: ', dateString, date);
   }
   return (
-    <ContentHeaderWrap style={props.style}>
-      <IconArrowLeft
-      onClick={() => {
-        router.back();
-      }}
-      cursor={'pointer'} fontSize={'20px'}/>
-      <div className='flex-center'>
-        <DatePicker
-          style={{ width: 200, marginRight: 20 }}
-          showTime={{
-            defaultValue: '04:05:06',
+    <>
+      <ContentHeaderWrap style={props.style}>
+        <IconArrowLeft
+          onClick={() => {
+            router.replace(`TodoList?id=${curTodoList.id}`);
           }}
-          format="YYYY-MM-DD HH:mm:ss"
-          onOk={onOk}
+          cursor={'pointer'}
+          fontSize={'20px'}
         />
-        <Popover content={<span style={{ whiteSpace: 'nowrap' }}>删除该Todo</span>}>
-          <IconDelete type="danger" color="red" fontSize={'22px'} />
-        </Popover>
-      </div>
-    </ContentHeaderWrap>
+        <div className="flex-center">
+          <DatePicker
+            style={{ width: 200, marginRight: 20 }}
+            showTime={{
+              defaultValue: '15:04:05',
+            }}
+            format="YYYY-MM-DD HH:mm:ss"
+            onOk={onOk}
+          />
+          <Popover content={<span style={{ whiteSpace: 'nowrap' }}>删除该Todo</span>}>
+            <IconDelete
+              type="danger"
+              color="red"
+              fontSize={'22px'}
+              cursor={'pointer'}
+              onClick={async () => {
+                setShowDeleteModal(true);
+              }}
+            />
+          </Popover>
+        </div>
+      </ContentHeaderWrap>
+
+      <Modal
+        title="删除Todo"
+        visible={showDeleteModal}
+        onOk={async () => {
+          const resp = await deleteCategory();
+          const id = query.get('id');
+          if (resp) {
+            setShowDeleteModal(false);
+            router.replace(`TodoList?id=${id}`);
+          }
+        }}
+        onCancel={() => setShowDeleteModal(false)}
+        autoFocus={false}
+        focusLock={true}
+        confirmLoading={loadDeleteCategory}
+      >
+        确定要删除Todo吗?
+      </Modal>
+    </>
   );
 };
 

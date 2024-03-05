@@ -1,8 +1,8 @@
 'use client';
 
 import { styled } from 'styled-components';
-import TodoHeader from './TodoHeader';
-import TodoItem from './TodoItem';
+import TodoHeader from './components/TodoHeader';
+import TodoItem from './components/TodoItem';
 import { FC, useCallback, useState } from 'react';
 import update from 'immutability-helper';
 import DragComp from '@cps/DragComp';
@@ -10,7 +10,7 @@ import { useHideDone } from './useTodoList';
 import Waiting from '@/components/Waiting';
 import ContextMenu from '@/components/ContextMenu';
 import { Modal } from '@arco-design/web-react';
-import { useDeleteTodo } from '@/service/useTodoApi';
+import { useDeleteTodoContent } from '@/service/useTodoListApi';
 import { useRouter } from 'next/navigation';
 import useTodoListStore, { ITodo } from '@/store/todoListStore';
 
@@ -38,10 +38,9 @@ interface IProps {
 const TodoList: FC<IProps> = (props) => {
   const [hideDone, setHideDone] = useState(false);
   const { showDone } = useHideDone();
-  // const { todoList, setTodoList, loadTodoList, refreshTodo } = useTodos();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [pickTodo, setPickTodo] = useState<ITodo>(); // 要删除或者编辑的Todo
-  const { deleteTodo, loadDeleteTodo } = useDeleteTodo();
+  const { deleteTodoContent, loadDeleteTodoContent } = useDeleteTodoContent();
   const router = useRouter();
   const { curTodoList, setCurTodoList, loadTodoList } = useTodoListStore((state) => state);
 
@@ -84,7 +83,7 @@ const TodoList: FC<IProps> = (props) => {
                   <ContextMenu
                     onEdit={() => {
                       setPickTodo(item);
-                      router.push('content');
+                      router.push(`content?id=${curTodoList.id}&cid=${item.id}`);
                       // setShowUpdateModal(true);
                     }}
                     onDelete={() => {
@@ -127,16 +126,17 @@ const TodoList: FC<IProps> = (props) => {
       </TodoListWrap>
 
       <Modal
-        title="删除分确定要删除该Todo吗？"
+        title="删除分确定要删除该Todo吗?"
         visible={showDeleteModal}
         onOk={async () => {
           console.log('确认删除');
-          const resp = await deleteTodo(pickTodo?.id || '');
+          const resp = await deleteTodoContent(pickTodo?.id || '');
           resp && setShowDeleteModal(false);
         }}
         onCancel={() => setShowDeleteModal(false)}
         autoFocus={false}
         focusLock={true}
+        confirmLoading={loadDeleteTodoContent}
       >
         {pickTodo?.content}
       </Modal>

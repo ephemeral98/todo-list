@@ -3,7 +3,7 @@ import { useSearchParams } from 'next/navigation';
 import useTodoListStore from '@/store/todoListStore';
 
 export const useTodoList = () => {
-  const searchParams = useSearchParams();
+  const query = useSearchParams();
   const { todoList, curTodoList, fetchTodoList, setTodoList, loadTodoList, setCurTodoList } =
     useTodoListStore((state) => state);
 
@@ -13,7 +13,7 @@ export const useTodoList = () => {
 
   useEffect(() => {
     if (todoList?.length) {
-      const curId = searchParams.get('id');
+      const curId = query.get('id');
       if (curId) {
         // 匹配todoList
         const curItem = todoList.find((item) => item.id === curId);
@@ -22,7 +22,7 @@ export const useTodoList = () => {
         setCurTodoList(todoList[0]);
       }
     }
-  }, [todoList, searchParams.get('id')]);
+  }, [todoList, query.get('id')]);
 
   return {
     curTodoList,

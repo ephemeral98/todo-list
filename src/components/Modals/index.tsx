@@ -1,6 +1,6 @@
-import { Button, Input, Modal } from '@arco-design/web-react';
+import { Input, Modal } from '@arco-design/web-react';
 import { FC, useEffect, useState } from 'react';
-import { useAddCategory, useUpdateCategory, useDeleteCategory } from '@/service/useCategoryApi';
+import { useAddCategory, useUpdateCategory, useDeleteCategory } from '@/service/useTodoListApi';
 
 export interface IAddCategoryModalProps {
   visible: boolean;
@@ -10,11 +10,10 @@ export interface IAddCategoryModalProps {
 
 export interface IUpdateCategoryModalProps extends IAddCategoryModalProps {
   name: string;
-}
-
-export interface IDeleteCategoryModalProps extends IUpdateCategoryModalProps {
   id: string;
 }
+
+export interface IDeleteCategoryModalProps extends IUpdateCategoryModalProps {}
 
 /**
  * 新增分类
@@ -72,8 +71,8 @@ export const UpdateCategoryModal: FC<IUpdateCategoryModalProps> = (props) => {
     setInpName(props.name);
   }, [props.name]);
 
-  const doAddCategory = async () => {
-    await updateCategory();
+  const doUpdateCategory = async () => {
+    await updateCategory({ id: props.id, name: props.name });
     props.onOk();
   };
 
@@ -81,7 +80,7 @@ export const UpdateCategoryModal: FC<IUpdateCategoryModalProps> = (props) => {
     <Modal
       title="修改分类"
       visible={props.visible}
-      onOk={doAddCategory}
+      onOk={doUpdateCategory}
       onCancel={props.onCancel}
       autoFocus={false}
       focusLock={true}
@@ -93,7 +92,7 @@ export const UpdateCategoryModal: FC<IUpdateCategoryModalProps> = (props) => {
         onSubmit={(e) => {
           e.preventDefault();
           console.log('提交');
-          doAddCategory();
+          doUpdateCategory();
         }}
       >
         <Input
@@ -115,8 +114,8 @@ export const UpdateCategoryModal: FC<IUpdateCategoryModalProps> = (props) => {
 export const DeleteCategoryModal: FC<IDeleteCategoryModalProps> = (props) => {
   const { deleteCategory, loadDeleteCategory } = useDeleteCategory();
 
-  const doAddCategory = async () => {
-    await deleteCategory();
+  const doDeleteCategory = async () => {
+    await deleteCategory({ id: props.id });
     props.onOk();
   };
 
@@ -124,7 +123,7 @@ export const DeleteCategoryModal: FC<IDeleteCategoryModalProps> = (props) => {
     <Modal
       title="删除分类"
       visible={props.visible}
-      onOk={doAddCategory}
+      onOk={doDeleteCategory}
       onCancel={props.onCancel}
       autoFocus={false}
       focusLock={true}

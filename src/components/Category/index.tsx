@@ -102,7 +102,7 @@ const Category: FC = () => {
             <Image src={require('@img/avatar.png')} alt="" className="w-30 h-30 rounded-[50%]" />
             <div className="ml-10 text-18 font-bold">Barry Guo</div>
           </div>
-          <IconPlus onClick={() => setShowAddModal(true)} />
+          <IconPlus cursor="pointer" onClick={() => setShowAddModal(true)} />
         </section>
       </CategoryWrap>
 

@@ -8,9 +8,11 @@ import {
   IconEye,
   IconEyeInvisible,
 } from '@arco-design/web-react/icon';
-import { useHideDone } from './useTodoList';
-import { useDeleteTodo } from '@/service/useTodoListApi';
+import { useHideDone } from '../useTodoList';
+import { useDeleteCategory, useDeleteTodoDone } from '@/service/useTodoListApi';
 import useTodoListStore from '@/store/todoListStore';
+import { useRouter } from 'next/navigation';
+import { UpdateCategoryModal } from '@cps/Modals';
 
 interface IProps {
   children: React.ReactNode;
@@ -37,12 +39,14 @@ const TodoHeaderWrap = styled.div`
 `;
 
 const TodoHeader: React.FC<IProps> = (props) => {
+  const router = useRouter();
   const { showDone, setDoneStatus } = useHideDone();
+  const [showUpdateCategoryModal, setShowUpdateCategoryModal] = useState(false); // 修改分类
   const [showDelCategoryModal, setShowDelCategoryModal] = useState(false);
   const [showDelAllDoneModal, setShowDelAllDoneModal] = useState(false);
-  const { deleteTodo, loadDeleteTodo } = useDeleteTodo();
-  const { todoList, curTodoList, fetchTodoList, setTodoList, loadTodoList, setCurTodoList } =
-    useTodoListStore((state) => state);
+  const { deleteCategory, loadDeleteCategory } = useDeleteCategory();
+  const { deleteTodoDone, loadDeleteTodoDone } = useDeleteTodoDone();
+  const { curTodoList } = useTodoListStore((state) => state);
 
   return (
     <>
@@ -55,7 +59,7 @@ const TodoHeader: React.FC<IProps> = (props) => {
           droplist={
             <Menu style={{ color: '#3A3A3B' }}>
               <Menu.Item key="1">
-                <Button type="text" size="mini" onClick={() => {}}>
+                <Button type="text" size="mini" onClick={() => setShowUpdateCategoryModal(true)}>
                   <IconPenFill />
                   修改
                 </Button>
@@ -99,7 +103,12 @@ const TodoHeader: React.FC<IProps> = (props) => {
                 </Button>
               </Menu.Item>
               <Menu.Item key="4">
-                <Button type="text" status="danger" size="mini" onClick={props.onDeleteDone}>
+                <Button
+                  type="text"
+                  status="danger"
+                  size="mini"
+                  onClick={() => setShowDelAllDoneModal(true)}
+                >
                   <IconDelete />
                   删除所有已完成的todo
                 </Button>
@@ -107,23 +116,51 @@ const TodoHeader: React.FC<IProps> = (props) => {
             </Menu>
           }
         >
-          <IconPlus style={{ color: '#3A3A3B' }} />
+          <IconPlus
+            style={{ color: '#3A3A3B' }}
+            onClick={() => {
+              router.push(`/content?id=${curTodoList.id}`);
+            }}
+          />
         </Dropdown.Button>
       </TodoHeaderWrap>
+
+      <UpdateCategoryModal
+        name={''}
+        id={''}
+        visible={showUpdateCategoryModal}
+        onOk={() => setShowUpdateCategoryModal(false)}
+        onCancel={() => setShowUpdateCategoryModal(false)}
+      />
 
       <Modal
         title="删除此分类"
         visible={showDelCategoryModal}
-        onOk={() => {
-          deleteTodo({ id: curTodoList.id });
-          setShowDelCategoryModal(false);
+        onOk={async () => {
+          const resp = await deleteCategory({ id: curTodoList.id });
+          resp && setShowDelCategoryModal(false);
         }}
         onCancel={() => setShowDelCategoryModal(false)}
         autoFocus={false}
         focusLock={true}
-        confirmLoading={loadDeleteTodo}
+        confirmLoading={loadDeleteCategory}
       >
         确定要删除分类 <span className="font-bold">{curTodoList.name}</span> 吗？
+      </Modal>
+
+      <Modal
+        visible={showDelAllDoneModal}
+        onOk={async () => {
+          const resp = await deleteTodoDone({ id: curTodoList.id });
+          resp && setShowDelAllDoneModal(false);
+        }}
+        onCancel={() => setShowDelAllDoneModal(false)}
+        autoFocus={false}
+        focusLock={true}
+        confirmLoading={loadDeleteTodoDone}
+        style={{ textAlign: 'center' }}
+      >
+        <span style={{ fontSize: '16rem' }}>确定要删除该分类所有已完成的todo吗？</span>
       </Modal>
     </>
   );
