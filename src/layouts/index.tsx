@@ -5,12 +5,12 @@ import styled from 'styled-components';
 import initRem from '@/utils/initRem';
 
 const Wrap = styled.div`
-  background-color: #87cfeb89;
+  /* background-color: #87cfeb89; */
   display: flex;
   height: 100vh;
 
   > aside {
-    background-color: #ff63476e;
+    background-color: #F3F4F6;
     flex: 0 0 300px;
   }
 

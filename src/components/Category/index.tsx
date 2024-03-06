@@ -9,8 +9,11 @@ import ContextMenu from '../ContextMenu';
 import { useRouter } from 'next/navigation';
 import { ITodoList } from '@/store/todoListStore';
 import { useTodoList } from '@/hooks/useTodo';
+import Waiting from '@cps/Waiting';
+import useTodoListStore from '@/store/todoListStore';
 
 const CategoryWrap = styled.div`
+  width: 100%;
   height: 100%;
   padding: 20px 10px;
   display: flex;
@@ -34,7 +37,7 @@ const CategoryWrap = styled.div`
     justify-content: space-between;
     align-items: center;
     flex: 0 0 50px;
-    background-color: red;
+    /* background-color: #F3F4F6; */
   }
 `;
 
@@ -45,6 +48,7 @@ const Category: FC = () => {
   const [pickCategory, setPickCategory] = useState<ITodoList>(); // 要删除或者编辑的分类
   const router = useRouter();
   const { todoList, curTodoList, fetchTodoList, setTodoList } = useTodoList();
+  const { loadTodoList } = useTodoListStore((state) => state);
 
   const onMoveCard = useCallback(
     (dragIndex: number, hoverIndex: number) => {
@@ -62,49 +66,51 @@ const Category: FC = () => {
 
   return (
     <>
-      <CategoryWrap>
-        <DragComp.Wrap className="category-list">
-          {todoList?.map((item, inx) => (
-            <DragComp.Item
-              className="cate-item"
-              key={item.id}
-              index={inx}
-              id={item.id}
-              onMoveCard={onMoveCard}
-            >
-              <ContextMenu
-                onEdit={() => {
-                  setPickCategory(item);
-                  setShowUpdateModal(true);
-                }}
-                onDelete={() => {
-                  setPickCategory(item);
-                  setShowDeleteModal(true);
-                }}
+      <Waiting isLoading={loadTodoList}>
+        <CategoryWrap>
+          <DragComp.Wrap className="category-list">
+            {todoList?.map((item, inx) => (
+              <DragComp.Item
+                className="cate-item"
+                key={item.id}
+                index={inx}
+                id={item.id}
+                onMoveCard={onMoveCard}
               >
-                <div>
-                  <CategoryItem
-                    onClick={() => {
-                      router.push(`TodoList?id=${item.id}`);
-                    }}
-                    name={item.name}
-                    active={item.id === curTodoList?.id}
-                    count={item.count}
-                  />
-                </div>
-              </ContextMenu>
-            </DragComp.Item>
-          ))}
-        </DragComp.Wrap>
+                <ContextMenu
+                  onEdit={() => {
+                    setPickCategory(item);
+                    setShowUpdateModal(true);
+                  }}
+                  onDelete={() => {
+                    setPickCategory(item);
+                    setShowDeleteModal(true);
+                  }}
+                >
+                  <div>
+                    <CategoryItem
+                      onClick={() => {
+                        router.push(`TodoList?id=${item.id}`);
+                      }}
+                      name={item.name}
+                      active={item.id === curTodoList?.id}
+                      count={item.count}
+                    />
+                  </div>
+                </ContextMenu>
+              </DragComp.Item>
+            ))}
+          </DragComp.Wrap>
 
-        <section className="panel">
-          <div className="flex-center">
-            <Image src={require('@img/avatar.png')} alt="" className="w-30 h-30 rounded-[50%]" />
-            <div className="ml-10 text-18 font-bold">Barry Guo</div>
-          </div>
-          <IconPlus cursor="pointer" onClick={() => setShowAddModal(true)} />
-        </section>
-      </CategoryWrap>
+          <section className="panel">
+            <div className="flex-center">
+              <Image src={require('@img/avatar.png')} alt="" className="w-30 h-30 rounded-[50%]" />
+              <div className="ml-10 text-18 font-bold">Barry Guo</div>
+            </div>
+            <IconPlus cursor="pointer" onClick={() => setShowAddModal(true)} />
+          </section>
+        </CategoryWrap>
+      </Waiting>
 
       {/* 新增分类 */}
       <AddCategoryModal
@@ -120,6 +126,7 @@ const Category: FC = () => {
       {/* 修改分类 */}
       <UpdateCategoryModal
         name={pickCategory?.name || ''}
+        id={pickCategory?.id || ''}
         visible={showUpdateModal}
         onOk={() => {
           setShowUpdateModal(false);

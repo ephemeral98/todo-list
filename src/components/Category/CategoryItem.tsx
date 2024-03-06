@@ -7,7 +7,7 @@ const CategoryItemWrap = styled.div<{ $active: boolean }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: ${(props) => (props.$active ? 'plum' : '#008c8c')};
+  background-color: ${(props) => (props.$active ? '#9a9a9b' : '#F3F4F6')};
   font-size: 15px;
   border-radius: 7px;
 

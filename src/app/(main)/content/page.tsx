@@ -11,8 +11,10 @@ const ContentWrap = styled.div`
   .write-todo {
     margin-top: 10rem;
     height: calc(100vh - 40px - 50rem);
-    background-color: pink;
+    background-color: #f3f4f6;
     font-size: 20rem;
+    padding: 18rem;
+    border-radius: 7px;
   }
 `;
 
@@ -31,7 +33,7 @@ const Content: React.FC = () => {
   return (
     <ContentWrap>
       <ContentHeader />
-      <div className='write-todo' contentEditable ref={contentRef}></div>
+      <div className="write-todo" contentEditable ref={contentRef}></div>
     </ContentWrap>
   );
 };

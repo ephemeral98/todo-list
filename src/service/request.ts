@@ -61,7 +61,9 @@ export const $POST = <T>(url: string, payload: object): Promise<IAxiosResp<T>> =
 export const $GET = <T>(url: string, payload?: object): Promise<IAxiosResp<T>> => {
   return new Promise((resolve, reject) => {
     axios
-      .get(url, payload)
+      .get(url, {
+        params: payload
+      })
       .then((res: any) => {
         resolve(res);
       })

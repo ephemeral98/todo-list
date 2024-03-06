@@ -16,8 +16,10 @@ const ContentHeaderWrap = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #008c8c;
+  background-color: #f3f4f6;
   height: 50rem;
+  border-radius: 7px;
+  padding: 0 15rem;
 
   .arco-icon.arco-icon-more {
     color: #3a3a3b;
@@ -50,6 +52,7 @@ const ContentHeader: React.FC<IProps> = (props) => {
         />
         <div className="flex-center">
           <DatePicker
+            placeholder="提醒时间"
             style={{ width: 200, marginRight: 20 }}
             showTime={{
               defaultValue: '15:04:05',
@@ -75,7 +78,8 @@ const ContentHeader: React.FC<IProps> = (props) => {
         title="删除Todo"
         visible={showDeleteModal}
         onOk={async () => {
-          const resp = await deleteCategory();
+          const cid = query.get('cid');
+          const resp = await deleteCategory({ id: cid || '' });
           const id = query.get('id');
           if (resp) {
             setShowDeleteModal(false);

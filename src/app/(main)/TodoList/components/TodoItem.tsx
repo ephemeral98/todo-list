@@ -4,7 +4,7 @@ import React from 'react';
 
 const TodoItemWrap = styled.div<{ $done: boolean; $active: boolean }>`
   display: flex;
-  background-color: ${(props) => (props.$active ? '#008c8c' : '#fff')};
+  background-color: ${(props) => (props.$active ? '#9a9a9b' : '#fff')};
   box-shadow: 0 0 10px gray;
   border-radius: 5rem;
   opacity: ${(props) => (props.$done ? 0.5 : 1)};

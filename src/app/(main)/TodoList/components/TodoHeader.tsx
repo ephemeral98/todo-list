@@ -13,6 +13,7 @@ import { useDeleteCategory, useDeleteTodoDone } from '@/service/useTodoListApi';
 import useTodoListStore from '@/store/todoListStore';
 import { useRouter } from 'next/navigation';
 import { UpdateCategoryModal } from '@cps/Modals';
+import { getRandom } from '@/utils';
 
 interface IProps {
   children: React.ReactNode;
@@ -27,7 +28,8 @@ const TodoHeaderWrap = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #008c8c;
+  background-color: #f3f4f6;
+  border-bottom: dashed 1px #c7c7c7a1;
 
   .arco-icon.arco-icon-more {
     color: #3a3a3b;
@@ -58,23 +60,21 @@ const TodoHeader: React.FC<IProps> = (props) => {
           onClick={() => {}}
           droplist={
             <Menu style={{ color: '#3A3A3B' }}>
-              <Menu.Item key="1">
-                <Button type="text" size="mini" onClick={() => setShowUpdateCategoryModal(true)}>
+              <Menu.Item key="1" onClick={() => setShowUpdateCategoryModal(true)}>
+                <Button type="text" size="mini">
                   <IconPenFill />
                   修改
                 </Button>
               </Menu.Item>
 
-              <Menu.Item key="2">
-                <Button
-                  type="text"
-                  status="warning"
-                  size="mini"
-                  onClick={() => {
-                    setDoneStatus();
-                    props.onHideDone();
-                  }}
-                >
+              <Menu.Item
+                key="2"
+                onClick={() => {
+                  setDoneStatus();
+                  props.onHideDone();
+                }}
+              >
+                <Button type="text" status="warning" size="mini">
                   {showDone() ? (
                     <>
                       <IconEyeInvisible />
@@ -89,15 +89,13 @@ const TodoHeader: React.FC<IProps> = (props) => {
                 </Button>
               </Menu.Item>
 
-              <Menu.Item key="3">
-                <Button
-                  type="text"
-                  status="danger"
-                  size="mini"
-                  onClick={() => {
-                    setShowDelCategoryModal(true);
-                  }}
-                >
+              <Menu.Item
+                key="3"
+                onClick={() => {
+                  setShowDelCategoryModal(true);
+                }}
+              >
+                <Button type="text" status="danger" size="mini">
                   <IconDelete />
                   删除此分类
                 </Button>
@@ -119,15 +117,15 @@ const TodoHeader: React.FC<IProps> = (props) => {
           <IconPlus
             style={{ color: '#3A3A3B' }}
             onClick={() => {
-              router.push(`/content?id=${curTodoList.id}`);
+              router.push(`/content?id=${curTodoList.id}&cid=${getRandom(99, 999)}`);
             }}
           />
         </Dropdown.Button>
       </TodoHeaderWrap>
 
       <UpdateCategoryModal
-        name={''}
-        id={''}
+        name={curTodoList.name}
+        id={curTodoList.id}
         visible={showUpdateCategoryModal}
         onOk={() => setShowUpdateCategoryModal(false)}
         onCancel={() => setShowUpdateCategoryModal(false)}

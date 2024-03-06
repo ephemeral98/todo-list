@@ -103,7 +103,7 @@ blockquote:after {
 a {
   display: block;
   text-decoration: none;
-  color: greenyellow;
+  color: #333;
   outline: none;
   cursor: pointer;
   /* FF Opera */
@@ -165,7 +165,7 @@ select {
 div,
 section {
   box-sizing: border-box;
-  color: greenyellow;
+  color: #333;
 }
 
 button {

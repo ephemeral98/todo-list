@@ -1,5 +1,6 @@
 'use client';
 
+import 'uno.css';
 import { styled } from 'styled-components';
 import TodoHeader from './components/TodoHeader';
 import TodoItem from './components/TodoItem';
@@ -21,11 +22,11 @@ const TodoListWrap = styled.div`
     padding-left: 10rem;
     padding-right: 10rem;
     overflow: auto;
-    background-color: pink;
+    background-color: #F3F4F6;
     width: 100%;
     height: calc(100vh - 40px - 50rem);
 
-    > div:not(:first-child) {
+    > div {
       margin-top: 10rem;
     }
   }
