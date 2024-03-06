@@ -8,7 +8,7 @@ import {
   IconEye,
   IconEyeInvisible,
 } from '@arco-design/web-react/icon';
-import { useHideDone } from '../useTodoList';
+import { useHideDone } from '@hooks/useTodo';
 import { useDeleteCategory, useDeleteTodoDone } from '@/service/useTodoListApi';
 import useTodoListStore from '@/store/todoListStore';
 import { useRouter } from 'next/navigation';

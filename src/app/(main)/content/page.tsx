@@ -1,7 +1,7 @@
 'use client';
 import 'uno.css';
 import ContentHeader from './components/Header';
-import { useEffect, useRef, useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 
 const ContentWrap = styled.div`
@@ -32,7 +32,9 @@ const Content: React.FC = () => {
 
   return (
     <ContentWrap>
-      <ContentHeader />
+      <Suspense>
+        <ContentHeader />
+      </Suspense>
       <div className="write-todo" contentEditable ref={contentRef}></div>
     </ContentWrap>
   );

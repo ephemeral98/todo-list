@@ -7,7 +7,7 @@ import TodoItem from './components/TodoItem';
 import { FC, useCallback, useState } from 'react';
 import update from 'immutability-helper';
 import DragComp from '@cps/DragComp';
-import { useHideDone } from './useTodoList';
+import { useHideDone } from '@hooks/useTodo';
 import Waiting from '@/components/Waiting';
 import ContextMenu from '@/components/ContextMenu';
 import { Modal } from '@arco-design/web-react';
@@ -22,7 +22,7 @@ const TodoListWrap = styled.div`
     padding-left: 10rem;
     padding-right: 10rem;
     overflow: auto;
-    background-color: #F3F4F6;
+    background-color: #f3f4f6;
     width: 100%;
     height: calc(100vh - 40px - 50rem);
 
@@ -32,11 +32,7 @@ const TodoListWrap = styled.div`
   }
 `;
 
-interface IProps {
-  title: string;
-}
-
-const TodoList: FC<IProps> = (props) => {
+export default function TodoList(props: any) {
   const [hideDone, setHideDone] = useState(false);
   const { showDone } = useHideDone();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -143,6 +139,4 @@ const TodoList: FC<IProps> = (props) => {
       </Modal>
     </>
   );
-};
-
-export default TodoList;
+}

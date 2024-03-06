@@ -1,3 +1,5 @@
+'use client';
+
 import { styled } from 'styled-components';
 import CategoryItem from './CategoryItem';
 import DragComp, { update } from '../DragComp';
