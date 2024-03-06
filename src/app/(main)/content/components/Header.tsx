@@ -45,7 +45,7 @@ const ContentHeader: React.FC<IProps> = (props) => {
       <ContentHeaderWrap style={props.style}>
         <IconArrowLeft
           onClick={() => {
-            router.replace(`TodoList?id=${curTodoList.id}`);
+            router.replace(`todo-list?id=${curTodoList.id}`);
           }}
           cursor={'pointer'}
           fontSize={'20px'}
@@ -83,7 +83,7 @@ const ContentHeader: React.FC<IProps> = (props) => {
           const id = query.get('id');
           if (resp) {
             setShowDeleteModal(false);
-            router.replace(`TodoList?id=${id}`);
+            router.replace(`todo-list?id=${id}`);
           }
         }}
         onCancel={() => setShowDeleteModal(false)}

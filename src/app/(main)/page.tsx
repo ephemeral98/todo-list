@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 
 const Home: React.FC = () => {
-  redirect('/TodoList');
+  redirect('/todo-list');
 };
 
 export default Home;

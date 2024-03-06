@@ -90,7 +90,7 @@ const Category: FC = () => {
                   <div>
                     <CategoryItem
                       onClick={() => {
-                        router.push(`TodoList?id=${item.id}`);
+                        router.push(`todo-list?id=${item.id}`);
                       }}
                       name={item.name}
                       active={item.id === curTodoList?.id}
