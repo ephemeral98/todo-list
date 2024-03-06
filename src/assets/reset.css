@@ -1,0 +1,182 @@
+/* 重置样式 */
+body,
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+pre,
+form,
+fieldset,
+input,
+p,
+blockquote,
+th,
+td {
+  font-weight: 400;
+  margin: 0;
+  padding: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h4,
+h5 {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  text-align: left;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+fieldset,
+img {
+  border: 0 none;
+  display: block;
+}
+
+fieldset {
+  margin: 0;
+  padding: 0;
+}
+
+fieldset p {
+  margin: 0;
+  padding: 0 0 0 8px;
+}
+
+legend {
+  display: none;
+}
+
+address,
+caption,
+em,
+th,
+i {
+  font-style: normal;
+  font-weight: 400;
+}
+
+table caption {
+  margin-left: -1px;
+}
+
+hr {
+  border-bottom: 1px solid #ffffff;
+  border-top: 1px solid #e4e4e4;
+  border-width: 1px 0;
+  clear: both;
+  height: 2px;
+  margin: 5px 0;
+  overflow: hidden;
+}
+
+ol,
+ul,
+li {
+  list-style-image: none;
+  list-style-position: outside;
+  list-style-type: none;
+}
+
+caption,
+th {
+  text-align: left;
+}
+
+q:before,
+q:after,
+blockquote:before,
+blockquote:after {
+  content: '';
+}
+
+a {
+  display: block;
+  text-decoration: none;
+  color: #333;
+  outline: none;
+  cursor: pointer;
+  /* FF Opera */
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+  /* 给移动端页面加上:active伪类,js中给body绑定touchstart事件，处理函数为空即可 */
+}
+
+body,
+dl,
+dd,
+ul,
+ol,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+form,
+p {
+  -webkit-tap-highlight-color: transparent;
+}
+
+input,
+textarea {
+  /* 兼容ios */
+  line-height: 1 !important;
+  outline: none;
+  display: block;
+  /* text-size-adjust: none !important; */
+  /* -webkit-appearance: none; */
+}
+input:focus {
+  border: none;
+  box-shadow: none !important;
+}
+
+input[type='text'],
+input[type='email'],
+input[type='url'],
+input[type='password'],
+input[type='number'],
+input[type='date'],
+input[type='datetime-local'],
+input[type='month'],
+input[type='search'],
+input[type='tel'],
+input[type='time'],
+input[type='week'],
+input[multiple],
+textarea,
+select {
+  outline: none;
+  box-shadow: none;
+  padding: 0;
+}
+
+div,
+section {
+  box-sizing: border-box;
+  color: #333;
+}
+
+button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  display: block;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}

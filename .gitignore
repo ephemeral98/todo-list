@@ -27,5 +27,6 @@ package-lock.json
 # yarn.lock
 components.d.ts
 auto-import.d.ts
+yarn.lock
 
 .next/*

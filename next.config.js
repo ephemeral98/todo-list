@@ -6,7 +6,7 @@ const nextConfig = {
   compiler: {
     styledComponents: true,
   },
-  reactStrictMode: true,
+  reactStrictMode: false,
   webpack: (config, context) => {
     config.plugins.push(UnoCSS({ presets: [presetUno()] }));
 
