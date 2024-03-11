@@ -1,4 +1,5 @@
-import { Spin, Button, Result } from '@arco-design/web-react';
+import { isClient } from '@/utils';
+import { Spin } from '@arco-design/web-react';
 import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 
@@ -27,6 +28,8 @@ const WaitingWrap = styled.div`
 `;
 
 interface IProps {
+  width?: string;
+  height?: string;
   isLoading: boolean; // 加载状态
   isError?: boolean; // 请求失败
   bg?: string; // 遮罩层背景颜色
@@ -48,11 +51,11 @@ const Waiting = (props: IProps) => {
     }
     const style = getComputedStyle(loadContent.current!.firstElementChild!);
     setContentSize({
-      width: style.width,
-      height: style.height,
+      width: props.width || style.width,
+      height: props.height || style.height,
       borderRadius: style.borderRadius,
     });
-  }, [loadContent]);
+  }, [loadContent, isClient() && document.documentElement.style?.fontSize]);
 
   useEffect(() => {
     if (!Number.parseFloat(contentSize.height)) {
@@ -65,7 +68,8 @@ const Waiting = (props: IProps) => {
   return (
     <WaitingWrap
       style={{
-        height: Number.parseFloat(contentSize.height) ? contentSize.height : '100%',
+        height:
+          props.height || (Number.parseFloat(contentSize.height) ? contentSize.height : '100%'),
       }}
     >
       <div className="wait-content" ref={loadContent}>

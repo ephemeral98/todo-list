@@ -68,7 +68,7 @@ const Category: FC = () => {
 
   return (
     <>
-      <Waiting isLoading={loadTodoList}>
+      <Waiting isLoading={loadTodoList} height='100vh'>
         <CategoryWrap>
           <DragComp.Wrap className="category-list">
             {todoList?.map((item, inx) => (
